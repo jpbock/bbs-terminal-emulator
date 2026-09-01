@@ -1,0 +1,40 @@
+{
+  "entries": [
+    {
+      "name": "Local IEMSI Test BBS",
+      "host": "127.0.0.1",
+      "port": 9023,
+      "username": "testuser",
+      "password": "testpass",
+      "terminal_type": "ANSI",
+      "auto_login": true,
+      "comments": "IEMSI-enabled test BBS running locally",
+      "times_called": 1,
+      "last_call": "2026-09-01T18:30:00Z"
+    },
+    {
+      "name": "SyncTerm Compatible BBS",
+      "host": "bbs.example.com",
+      "port": 23,
+      "username": "user",
+      "password": "",
+      "terminal_type": "ANSI-RIP",
+      "auto_login": false,
+      "comments": "Modern BBS with RIP 1.54 support",
+      "times_called": 0,
+      "last_call": null
+    },
+    {
+      "name": "Retro BBS",
+      "host": "retro-bbs.example.net",
+      "port": 23,
+      "username": "",
+      "password": "",
+      "terminal_type": "ANSI",
+      "auto_login": false,
+      "comments": "Classic BBS without IEMSI - manual login required",
+      "times_called": 0,
+      "last_call": null
+    }
+  ]
+}

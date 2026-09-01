@@ -1,0 +1,26 @@
+{
+  "user_name": "BBSTerminalUser",
+  "real_name": "Terminal User",
+  "alias": "TermUser",
+  "email_address": "user@example.com",
+  "phone_number": "555-0123",
+  "terminal_type": "ANSI",
+  "terminal_width": 80,
+  "terminal_height": 25,
+  "supports_color": true,
+  "supports_graphics": true,
+  "baud_rate": 115200,
+  "call_count": 0,
+  "new_user": false,
+  "deleted_user": false,
+  "capabilities": {
+    "terminal": true,
+    "file_transfer": true,
+    "chat": true,
+    "file_request": true,
+    "voice": false,
+    "newsreader": false,
+    "archiver": true,
+    "modem": true
+  }
+}
