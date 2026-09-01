@@ -4,6 +4,18 @@ project(BBSTerminalEmulator VERSION 1.0.0 LANGUAGES CXX)
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+# Detect platform
+if(CMAKE_GENERATOR MATCHES "Win32")
+    set(PLATFORM_NAME "Win32")
+    set(IS_32BIT TRUE)
+elseif(CMAKE_GENERATOR MATCHES "x64" OR CMAKE_SIZEOF_VOID_P EQUAL 8)
+    set(PLATFORM_NAME "x64")
+    set(IS_32BIT FALSE)
+else()
+    set(PLATFORM_NAME "x64")
+    set(IS_32BIT FALSE)
+endif()
+
 # Find required packages
 find_package(jsoncpp REQUIRED)
 
@@ -61,6 +73,31 @@ set(HEADERS
 # Create executable
 add_executable(bbs-terminal ${SOURCES} ${HEADERS})
 
+# Platform-specific settings
+if(IS_32BIT)
+    set_target_properties(bbs-terminal PROPERTIES
+        SUFFIX ".exe"
+        PREFIX ""
+    )
+    # 32-bit specific compile options
+    if(MSVC)
+        target_compile_options(bbs-terminal PRIVATE
+            /arch:SSE2  # SSE2 for 32-bit
+        )
+    endif()
+else()
+    set_target_properties(bbs-terminal PROPERTIES
+        SUFFIX ".exe"
+        PREFIX ""
+    )
+    # 64-bit specific compile options
+    if(MSVC)
+        target_compile_options(bbs-terminal PRIVATE
+            /arch:AVX2  # AVX2 for 64-bit
+        )
+    endif()
+endif()
+
 # Link libraries
 target_link_libraries(bbs-terminal PRIVATE
     jsoncpp_lib
@@ -94,6 +131,12 @@ if(MSVC)
         $<$<CONFIG:Release>:/O2>    # Optimize for speed
         $<$<CONFIG:Release>:/Oi>    # Intrinsic functions
     )
+    
+    # Debug build options
+    target_compile_options(bbs-terminal PRIVATE
+        $<$<CONFIG:Debug>:/Zi>      # Program database
+        $<$<CONFIG:Debug>:/RTC1>    # Runtime checks
+    )
 else()
     target_compile_options(bbs-terminal PRIVATE
         -Wall
@@ -104,11 +147,19 @@ else()
 endif()
 
 # Set output directory
-set_target_properties(bbs-terminal PROPERTIES
-    RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin
-    LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib
-    ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib
-)
+if(IS_32BIT)
+    set_target_properties(bbs-terminal PROPERTIES
+        RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin/Win32
+        LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib/Win32
+        ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib/Win32
+    )
+else()
+    set_target_properties(bbs-terminal PROPERTIES
+        RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin/x64
+        LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib/x64
+        ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib/x64
+    )
+endif()
 
 # Version information
 set_target_properties(bbs-terminal PROPERTIES
@@ -116,10 +167,29 @@ set_target_properties(bbs-terminal PROPERTIES
     SOVERSION 1
 )
 
+# Define platform macro
+if(IS_32BIT)
+    target_compile_definitions(bbs-terminal PRIVATE
+        PLATFORM_WIN32
+        _WIN32
+    )
+else()
+    target_compile_definitions(bbs-terminal PRIVATE
+        PLATFORM_X64
+        _WIN64
+    )
+endif()
+
 # Print configuration
 message(STATUS "BBS Terminal Emulator - Configuration Summary")
 message(STATUS "CMAKE_BUILD_TYPE: ${CMAKE_BUILD_TYPE}")
 message(STATUS "CMAKE_CXX_COMPILER: ${CMAKE_CXX_COMPILER}")
 message(STATUS "CMAKE_CXX_FLAGS: ${CMAKE_CXX_FLAGS}")
+message(STATUS "PLATFORM: ${PLATFORM_NAME}")
 message(STATUS "TARGET: bbs-terminal")
 message(STATUS "VERSION: ${PROJECT_VERSION}")
+if(IS_32BIT)
+    message(STATUS "BUILD TYPE: 32-bit (Win32)")
+else()
+    message(STATUS "BUILD TYPE: 64-bit (x64)")
+endif()
