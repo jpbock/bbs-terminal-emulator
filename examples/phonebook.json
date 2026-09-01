@@ -1,0 +1,26 @@
+{
+  "entries": [
+    {
+      "name": "Example BBS",
+      "host": "example-bbs.net",
+      "port": 23,
+      "username": "",
+      "password": "",
+      "terminal_type": "ANSI",
+      "auto_login": false,
+      "comments": "A sample BBS entry",
+      "times_called": 0
+    },
+    {
+      "name": "Another BBS",
+      "host": "anotherbbs.com",
+      "port": 23,
+      "username": "guest",
+      "password": "",
+      "terminal_type": "ANSI",
+      "auto_login": true,
+      "comments": "Auto-login example",
+      "times_called": 5
+    }
+  ]
+}

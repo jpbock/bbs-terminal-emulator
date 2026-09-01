@@ -1,0 +1,22 @@
+{
+  "window": {
+    "width": 1024,
+    "height": 768,
+    "font": "Consolas",
+    "font_size": 12
+  },
+  "terminal": {
+    "width": 80,
+    "height": 25,
+    "type": "ANSI"
+  },
+  "colors": {
+    "foreground": 16777215,
+    "background": 0
+  },
+  "features": {
+    "sound": true,
+    "rip": true,
+    "logging": false
+  }
+}
